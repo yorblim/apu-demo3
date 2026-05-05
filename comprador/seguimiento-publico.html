@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento - APU LUXURY</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/comprador.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body id="seguimiento-page">
+    <div id="navbar-container"></div>
+
+    <main class="main-content" style="padding-top: 80px;">
+        <section class="seguimiento-section">
+            <div class="seguimiento-search">
+                <h1 class="seguimiento-search-title">Rastrea tu Pedido</h1>
+                <form id="form-seguimiento" class="seguimiento-search-form">
+                    <input type="text" id="input-codigo" class="form-input" placeholder="Ingresa tu código de pedido (ej: APU-260501-0001)">
+                    <button type="submit" id="btn-buscar" class="btn btn-primary">BUSCAR</button>
+                </form>
+            </div>
+
+            <div id="seguimiento-resultado"></div>
+        </section>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/componentes.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const storage = window.StorageUtils;
+            
+            document.getElementById('form-seguimiento').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const codigo = document.getElementById('input-codigo').value.trim();
+                
+                if (!codigo) { storage.toast('Ingresa un código', 'error'); return; }
+                
+                const pedidos = storage.obtener(storage.almacen.PEDIDOS) || [];
+                const pedido = pedidos.find(p => p.codigoPedido === codigo || p.codigoSeguimiento === codigo);
+                
+                if (!pedido) { storage.toast('Pedido no encontrado', 'error'); return; }
+                
+                const estados = ['Origen', 'En Tránsito', 'Destino', 'Entregado'];
+                const idx = estados.indexOf(pedido.estado);
+                
+                document.getElementById('seguimiento-resultado').innerHTML = `
+                    <div class="seguimiento-card">
+                        <div class="seguimiento-status">
+                            <h3 class="seguimiento-status-title">Pedido: ${pedido.codigoPedido}</h3>
+                            <span class="seguimiento-badge badge-success">${pedido.estado}</span>
+                        </div>
+                        
+                        <div class="seguimiento-steps">
+                            ${estados.map((e, i) => `
+                                <div class="seguimiento-step ${i <= idx ? 'active' : ''} ${i < idx ? 'completed' : ''}">
+                                    <div class="seguimiento-step-icon">
+                                        <i class="fas ${i < idx ? 'fa-check' : 'fa-circle'}"></i>
+                                    </div>
+                                    <span class="seguimiento-step-label">${e}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="seguimiento-details">
+                            <div class="seguimiento-detail"><span class="seguimiento-detail-label">Ciudad Origen</span><span class="seguimiento-detail-value">Cusco</span></div>
+                            <div class="seguimiento-detail"><span class="seguimiento-detail-label">Ciudad Destino</span><span class="seguimiento-detail-value">${pedido.direccion.ciudad}</span></div>
+                            <div class="seguimiento-detail"><span class="seguimiento-detail-label">Cliente</span><span class="seguimiento-detail-value">${pedido.compradorNombre}</span></div>
+                            <div class="seguimiento-detail"><span class="seguimiento-detail-label">Total</span><span class="seguimiento-detail-value">${storage.precio(pedido.total)}</span></div>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>
+

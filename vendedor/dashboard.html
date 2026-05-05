@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - APU LUXURY Vendedor</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/vendedor.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body id="dashboard-page">
+    <div class="dashboard-layout">
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="../image/Logo-Apu-Luxury-dorado-negro.png" alt="APU LUXURY">
+                    <span class="sidebar-logo-badge">PRO</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-title">Menú</div>
+                <a href="./dashboard.html" class="sidebar-nav-item active"><i class="fas fa-home"></i> Inicio</a>
+                <a href="./productos.html" class="sidebar-nav-item"><i class="fas fa-box"></i> Productos</a>
+                <a href="./inventario.html" class="sidebar-nav-item"><i class="fas fa-warehouse"></i> Inventario</a>
+                <a href="./pedidos.html" class="sidebar-nav-item"><i class="fas fa-shopping-cart"></i> Pedidos</a>
+                <a href="./exportacion.html" class="sidebar-nav-item"><i class="fas fa-shipping-fast"></i> Exportación</a>
+                <a href="./documentacion.html" class="sidebar-nav-item"><i class="fas fa-file-alt"></i> Documentación</a>
+                
+                <div class="sidebar-nav-title" style="margin-top: 20px;">Cuenta</div>
+                <a href="./perfil.html" class="sidebar-nav-item"><i class="fas fa-store"></i> Mi Tienda</a>
+                <a href="./estadisticas.html" class="sidebar-nav-item"><i class="fas fa-chart-line"></i> Estadísticas</a>
+                <a href="./configuracion.html" class="sidebar-nav-item"><i class="fas fa-cog"></i> Configuración</a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-user-avatar" id="user-avatar">V</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="user-name">Vendedor</div>
+                        <div class="sidebar-user-role">Vendedor</div>
+                    </div>
+                </div>
+                <a href="../login.html" style="display: block; margin-top: 15px; color: #EF4444; font-size: 13px;" id="btn-cerrar-sesion"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+            </div>
+        </aside>
+
+        <main class="dashboard-main">
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h1 class="header-title">Dashboard</h1>
+                    <p class="header-subtitle">Bienvenido de nuevo</p>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn"><i class="fas fa-bell"></i><span class="header-notification-badge"></span></button>
+                    <a href="./productos.html" class="btn btn-primary btn-sm">+ AGREGAR PRODUCTO</a>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon orange"><i class="fas fa-soles"></i></div>
+                            <div class="stat-card-trend up"><i class="fas fa-arrow-up"></i> 12%</div>
+                        </div>
+                        <div class="stat-card-value" id="stat-ventas">S/ 0.00</div>
+                        <div class="stat-card-label">Ventas Totales</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon gold"><i class="fas fa-boxes"></i></div>
+                        </div>
+                        <div class="stat-card-value" id="stat-pedidos">0</div>
+                        <div class="stat-card-label">Pedidos Totales</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon green"><i class="fas fa-shirt"></i></div>
+                        </div>
+                        <div class="stat-card-value" id="stat-productos">0</div>
+                        <div class="stat-card-label">Productos</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon blue"><i class="fas fa-users"></i></div>
+                        </div>
+                        <div class="stat-card-value" id="stat-clientes">0</div>
+                        <div class="stat-card-label">Clientes</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <h3 class="dashboard-card-title">Pedidos Recientes</h3>
+                        <a href="./pedidos.html" class="dashboard-card-action">Ver todos</a>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <table class="table-vendedor">
+                            <thead>
+                                <tr>
+                                    <th>Pedido</th>
+                                    <th>Cliente</th>
+                                    <th>Total</th>
+                                    <th>Estado</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pedidos-recientes"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <h3 class="dashboard-card-title">Productos con Stock Bajo</h3>
+                        <a href="./inventario.html" class="dashboard-card-action">Ver inventario</a>
+                    </div>
+                    <div class="dashboard-card-body" id="productos-bajo-stock"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/vendedor.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const storage = window.StorageUtils;
+            if (!storage.verificarVendedor()) return;
+            
+            const sesion = storage.obtenerSesion();
+            document.getElementById('user-name').textContent = sesion.nombre;
+            document.getElementById('user-avatar').textContent = sesion.nombre[0];
+            
+            document.getElementById('btn-cerrar-sesion').addEventListener('click', function(e) {
+                e.preventDefault();
+                storage.cerrar();
+                window.location.href = '../login.html';
+            });
+            
+            const productos = storage.obtener(storage.almacen.PRODUCTOS) || [];
+            const pedidos = storage.obtener(storage.almacen.PEDIDOS) || [];
+            
+            const ventasTotales = pedidos.reduce((s, p) => s + p.total, 0);
+            document.getElementById('stat-ventas').textContent = storage.precio(ventasTotales);
+            document.getElementById('stat-pedidos').textContent = pedidos.length;
+            document.getElementById('stat-productos').textContent = productos.length;
+            document.getElementById('stat-clientes').textContent = new Set(pedidos.map(p => p.compradorId)).size;
+            
+            const pedidosRecientes = pedidos.slice(0, 5);
+            document.getElementById('pedidos-recientes').innerHTML = pedidosRecientes.length === 0 ? '<tr><td colspan="5" style="text-align: center; padding: 20px;">No hay pedidos</td></tr>' : pedidosRecientes.map(p => `
+                <tr>
+                    <td><strong>${p.codigoPedido}</strong></td>
+                    <td>${p.compradorNombre}</td>
+                    <td>${storage.precio(p.total)}</td>
+                    <td><span class="table-status pending">${p.estado}</span></td>
+                    <td>${new Date(p.fechaPedido).toLocaleDateString('es-PE')}</td>
+                </tr>
+            `).join('');
+            
+            const bajoStock = productos.filter(p => p.stock < 10);
+            document.getElementById('productos-bajo-stock').innerHTML = bajoStock.length === 0 ? '<p style="color: #10B981; text-align: center;">Todos los productos tienen stock suficiente</p>' : bajoStock.map(p => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #E5E7EB;">
+                    <span>${p.nombre}</span>
+                    <span style="color: ${p.stock < 5 ? '#EF4444' : '#F59E0B'}; font-weight: 600;">${p.stock} unidades</span>
+                </div>
+            `).join('');
+        });
+    </script>
+</body>
+</html>

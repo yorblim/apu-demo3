@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APU LUXURY - Moda Andina Premium</title>
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/comprador.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="hero-comprador" style="position: relative; width: 100%; height: 100vh;">
+        <img src="image/background-home.jpg" alt="Paisaje de los Andes" class="hero-bg">
+        <div class="hero-overlay"></div>
+
+        <header class="navbar-comprador">
+            <div class="navbar-logo">
+                <a href="index.html">
+                    <img src="image/Logo-Apu-Luxury-dorado-negro.png" alt="APU LUXURY">
+                </a>
+            </div>
+
+            <nav class="navbar-menu">
+                <a href="index.html" class="active">INICIO</a>
+                <a href="catalogo-publico.html">COLECCIONES</a>
+                <a href="#historia">HISTORIA</a>
+                <a href="#contacto">CONTACTO</a>
+            </nav>
+
+            <div class="navbar-icons">
+                <a href="catalogo-publico.html" class="navbar-icon"><i class="fas fa-search"></i></a>
+                <a href="login.html" class="navbar-icon"><i class="fas fa-user"></i></a>
+                <a href="carrito.html" class="navbar-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="navbar-cart-count" id="cart-count" style="display: none;">0</span>
+                </a>
+                <button class="mobile-menu-btn" id="menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Menú Móvil -->
+        <div class="mobile-menu" id="mobile-menu">
+            <i class="fas fa-times mobile-close" id="menu-close"></i>
+            <a href="index.html">INICIO</a>
+            <a href="catalogo-publico.html">COLECCIONES</a>
+            <a href="#historia">HISTORIA</a>
+            <a href="#contacto">CONTACTO</a>
+            <a href="login.html">INICIAR SESIÓN</a>
+        </div>
+
+        <div class="hero-content">
+            <span class="hero-location">CUSCO - PERÚ - DESDE 2026</span>
+            <h1 class="hero-title">
+                El Arte de los <span class="text-gold">Andes,</span> Hecho <br>Moda
+            </h1>
+            <p class="hero-description">
+                Prendas de alpaca tejidas a mano por artesanos cusqueños.<br>
+                Herencia milenaria con diseño contemporáneo para el mundo.
+            </p>
+            <div class="hero-buttons">
+                <a href="catalogo-publico.html" class="btn btn-primary">EXPLORAR COLECCIÓN &nbsp; <i class="fas fa-arrow-right"></i></a>
+                <a href="login.html" class="btn btn-outline">INICIAR SESIÓN</a>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">
+            <span>DESCUBRIR</span>
+            <div class="scroll-line"></div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-number">+2,400</span>
+                <span class="stat-label">CLIENTES FELICES</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">ALPACA AUTÉNTICA</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">32</span>
+                <span class="stat-label">ARTESAN@S</span>
+            </div>
+        </div>
+    </div>
+
+    <section class="categories-section">
+        <div class="section-heading">
+            <span class="section-subheading">EXPLORA</span>
+            <h2 class="section-title">Nuestras Categorías</h2>
+            <p class="section-description">Cada pieza, una historia tejida a mano con fibras seleccionadas de los Andes peruanos.</p>
+        </div>
+
+        <div class="categories-grid">
+            <a href="catalogo-publico.html?categoria=abrigos" class="category-card">
+                <img src="image/abrigos-ponchos-mujer.jpg" alt="Abrigos y Ponchos">
+                <div class="category-overlay"></div>
+                <h3 class="category-title">Abrigos & Ponchos</h3>
+            </a>
+            <a href="catalogo-publico.html?categoria=chompas" class="category-card">
+                <img src="image/poncho-mujer.jpg" alt="Chompas">
+                <div class="category-overlay"></div>
+                <h3 class="category-title">Chompas & Sweaters</h3>
+            </a>
+            <a href="catalogo-publico.html?categoria=accesorios" class="category-card">
+                <img src="image/sombrero-chalina-rojo.jpg" alt="Accesorios">
+                <div class="category-overlay"></div>
+                <h3 class="category-title">Accesorios</h3>
+            </a>
+            <a href="catalogo-publico.html?categoria=vestidos" class="category-card">
+                <img src="image/chica-vestido-rojo.jpg" alt="Vestidos">
+                <div class="category-overlay"></div>
+                <h3 class="category-title">Vestidos & Faldas</h3>
+            </a>
+        </div>
+    </section>
+
+    <section class="products-section">
+        <div class="section-heading">
+            <span class="badge badge-orange" style="margin-bottom: 15px;">BESTSELLERS</span>
+            <h2 class="section-title">Piezas Destacadas</h2>
+            <p class="section-description">Las favoritas de nuestra comunidad. Alpaca auténtica, diseño atemporal.</p>
+        </div>
+
+        <div class="products-grid" id="productos-destacados"></div>
+
+        <div class="section-footer" style="text-align: center; margin-top: 40px;">
+            <a href="catalogo-publico.html" class="btn btn-outline-dark">VER TODA LA COLECCIÓN &nbsp; &rarr;</a>
+        </div>
+    </section>
+
+    <section class="essence-section" id="historia">
+        <div class="essence-container">
+            <div class="essence-image">
+                <img src="image/señora-tejido-artesanal-sobre-nosotros.jpg" alt="Artesana tejiendo">
+            </div>
+            <div class="essence-content">
+                <span class="badge-soft">NUESTRA ESENCIA</span>
+                <h2 class="essence-title">Donde la Tradición <span class="text-orange">Encuentra</span> el Diseño Moderno</h2>
+                <p class="essence-desc">
+                    En APU LUXURY — "manos de oro" en quechua — creemos que la moda más auténtica nace de la tierra.
+                    Cada hilo cuenta la historia de los Andes, cada prenda es un puente entre el pasado milenario y el presente global.
+                </p>
+                
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-leaf"></i></div>
+                    <div class="feature-info">
+                        <h4 class="feature-title">Fibra de Alpaca Auténtica</h4>
+                        <p class="feature-desc">Seleccionamos solo la fibra más fina de alpacas criadas en las alturas del Cusco.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-hands"></i></div>
+                    <div class="feature-info">
+                        <h4 class="feature-title">Tejido Artesanal</h4>
+                        <p class="feature-desc">Cada prenda es tejida a mano por artesanas cusqueñas con técnicas ancestrales.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-globe-americas"></i></div>
+                    <div class="feature-info">
+                        <h4 class="feature-title">Envío Internacional</h4>
+                        <p class="feature-desc">Llevamos la herencia andina a todo el mundo con envíos seguros.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials-section">
+        <div class="section-heading">
+            <span class="section-subheading">TESTIMONIOS</span>
+            <h2 class="section-title">Lo Que Dicen Nuestras Clientas</h2>
+        </div>
+
+        <div class="testimonial-card">
+            <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+            <div class="testimonial-stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-text">
+                "Recibí mi poncho Inti Raymi y quedé sin palabras. La calidad de la alpaca es incomparable, suave como nunca había sentido. Cada vez que lo uso recibo comentarios. Vale cada centavo."
+            </p>
+            <div class="testimonial-author">
+                <img src="image/chica-joven-sonriente.jpg" alt="Valentina Morales">
+                <h4 class="testimonial-author-name">Valentina Morales</h4>
+                <span class="testimonial-author-location">Buenos Aires, Argentina</span>
+            </div>
+        </div>
+
+        <div class="carousel-controls">
+            <button class="carousel-btn"><i class="fas fa-arrow-left"></i></button>
+            <button class="carousel-btn"><i class="fas fa-arrow-right"></i></button>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <img src="image/footer-home.jpg" alt="Colección" class="cta-bg">
+        <div class="cta-overlay"></div>
+        <div class="cta-content">
+            <span class="badge badge-gold" style="margin-bottom: 20px;">COLECCIÓN 2026</span>
+            <h2 class="cta-title">Viste la Historia de los Andes</h2>
+            <p class="cta-desc">
+                Descubre nuestra nueva colección primavera-verano. Piezas únicas que celebren la riqueza cultural del Cusco.
+            </p>
+            <a href="catalogo-publico.html" class="btn btn-primary">VER NUEVA COLECCIÓN &nbsp; <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <footer class="footer-comprador" id="contacto">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <img src="image/Logo-Apu-Luxury-dorado-negro.png" alt="APU LUXURY">
+                </div>
+                <p class="footer-desc">
+                    Moda andina de alta calidad, tejida a mano en Cusco con fibra de alpaca auténtica.
+                </p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-title">NAVEGACIÓN</h4>
+                <div class="footer-links">
+                    <a href="index.html">Inicio</a>
+                    <a href="catalogo-publico.html">Colecciones</a>
+                    <a href="#historia">Nuestra História</a>
+                    <a href="#contacto">Contacto</a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4 class="footer-title">INFORMACIÓN</h4>
+                <div class="footer-links">
+                    <a href="#">Envíos y Devoluciones</a>
+                    <a href="#">Guía de Tallas</a>
+                    <a href="#">Cuidados de Prendas</a>
+                    <a href="#">Preguntas Frecuentes</a>
+                </div>
+            </div>
+
+            <div class="footer-col footer-newsletter">
+                <h4 class="footer-title">ÚNETE A LA COMUNIDAD</h4>
+                <p>Recibe ofertas exclusivas y noticias sobre nuevas colecciones.</p>
+                <form class="footer-newsletter-form">
+                    <input type="email" placeholder="tu@correo.com">
+                    <button type="submit"><i class="fas fa-arrow-right"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 APU LUXURY. Todos los derechos reservados.</p>
+            <p>Diseñado con <i class="fas fa-heart"></i> desde Cusco, Perú</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/storage.js"></script>
+    <script>
+        // Menú hamburguesa
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.add('active');
+        });
+        document.getElementById('menu-close').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.remove('active');
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const storage = window.StorageUtils;
+            storage.init();
+            storage.initPrueba();
+
+            const grid = document.getElementById('productos-destacados');
+            if (grid) {
+                const productos = storage.obtener(storage.almacen.PRODUCTOS) || [];
+                const destacados = productos.slice(0, 8);
+                
+                grid.innerHTML = destacados.map(producto => `
+                    <article class="product-card">
+                        <div class="product-image">
+                            ${producto.precioOriginal ? '<span class="product-badge badge-pink">SALE</span>' : ''}
+                            <button class="product-wishlist"><i class="far fa-heart"></i></button>
+                            <img src="${producto.imagen}" alt="${producto.nombre}">
+                            <button class="product-add" onclick="window.location.href='login.html'">AÑADIR AL CARRITO</button>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">${producto.categoria.toUpperCase()}</span>
+                            <h3 class="product-name">${producto.nombre}</h3>
+                            <p class="product-material">${producto.material}</p>
+                            <p class="product-price">
+                                <strong>${storage.precio(producto.precio)}</strong>
+                                ${producto.precioOriginal ? '<del>' + storage.precio(producto.precioOriginal) + '</del>' : ''}
+                            </p>
+                        </div>
+                    </article>
+                `).join('');
+            }
+        });
+    </script>
+</body>
+</html>

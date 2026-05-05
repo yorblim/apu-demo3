@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario - APU LUXURY Vendedor</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/vendedor.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body id="inventario-page">
+    <div class="dashboard-layout">
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header"><div class="sidebar-logo"><img src="../image/Logo-Apu-Luxury-dorado-negro.png" alt="APU LUXURY"><span class="sidebar-logo-badge">PRO</span></div></div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-title">Menú</div>
+                <a href="./dashboard.html" class="sidebar-nav-item"><i class="fas fa-home"></i> Inicio</a>
+                <a href="./productos.html" class="sidebar-nav-item"><i class="fas fa-box"></i> Productos</a>
+                <a href="./inventario.html" class="sidebar-nav-item active"><i class="fas fa-warehouse"></i> Inventario</a>
+                <a href="./pedidos.html" class="sidebar-nav-item"><i class="fas fa-shopping-cart"></i> Pedidos</a>
+                <a href="./exportacion.html" class="sidebar-nav-item"><i class="fas fa-shipping-fast"></i> Exportación</a>
+                <a href="./documentacion.html" class="sidebar-nav-item"><i class="fas fa-file-alt"></i> Documentación</a>
+                <div class="sidebar-nav-title" style="margin-top: 20px;">Cuenta</div>
+                <a href="./perfil.html" class="sidebar-nav-item"><i class="fas fa-store"></i> Mi Tienda</a>
+                <a href="./configuracion.html" class="sidebar-nav-item"><i class="fas fa-cog"></i> Configuración</a>
+            </nav>
+            <div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar" id="avatar">V</div><div class="sidebar-user-name" id="nombre">Vendedor</div></div><a href="../login.html" id="cerrar">Cerrar Sesión</a></div>
+        </aside>
+        <main class="dashboard-main">
+            <header class="dashboard-header"><div class="header-left"><h1 class="header-title">Inventario</h1></div></header>
+            <div class="dashboard-content">
+                <div class="inventario-grid">
+                    <div class="inventario-card"><div class="inventario-card-title">Stock Total</div><div class="inventario-card-value" id="inv-total">0</div></div>
+                    <div class="inventario-card"><div class="inventario-card-title">Stock Bajo (&lt;10)</div><div class="inventario-card-value warning" id="inv-bajo">0</div></div>
+                    <div class="inventario-card"><div class="inventario-card-title">Agotados</div><div class="inventario-card-value danger" id="inv-agotado">0</div></div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header"><h3 class="dashboard-card-title">Productos con Stock Bajo</h3></div>
+                    <div class="dashboard-card-body" id="lista-bajo-stock"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const storage = window.StorageUtils;
+            if (!storage.verificarVendedor()) return;
+            const sesion = storage.obtenerSesion();
+            document.getElementById('nombre').textContent = sesion.nombre;
+            document.getElementById('avatar').textContent = sesion.nombre[0];
+            document.getElementById('cerrar').addEventListener('click', e => { e.preventDefault(); storage.cerrar(); window.location.href = '../login.html'; });
+            const productos = storage.obtener(storage.almacen.PRODUCTOS) || [];
+            const total = productos.reduce((s, p) => s + p.stock, 0);
+            const bajo = productos.filter(p => p.stock > 0 && p.stock < 10);
+            const agotado = productos.filter(p => p.stock === 0);
+            document.getElementById('inv-total').textContent = total;
+            document.getElementById('inv-bajo').textContent = bajo.length;
+            document.getElementById('inv-agotado').textContent = agotado.length;
+            document.getElementById('lista-bajo-stock').innerHTML = bajo.length === 0 ? '<p style="text-align:center;color:#10B981;">Stock suficiente</p>' : bajo.map(p => `<div style="padding:15px 0;border-bottom:1px solid #E5E7EB;display:flex;justify-content:space-between;"><span>${p.nombre}</span><span style="color:#F59E0B;font-weight:600;">${p.stock} unidades</span></div>`).join('');
+        });
+    </script>
+</body>
+</html>

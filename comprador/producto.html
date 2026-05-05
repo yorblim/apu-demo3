@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producto - APU LUXURY</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/comprador.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body id="producto-page">
+    <div id="navbar-container"></div>
+
+    <main class="main-content" style="padding-top: 80px;">
+        <section class="product-detail-section">
+            <div class="product-detail-grid" id="producto-contenido"></div>
+        </section>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/componentes.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const storage = window.StorageUtils;
+            if (!storage.estaAutenticado()) {
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const productoId = urlParams.get('id');
+            
+            const productos = storage.obtener(storage.almacen.PRODUCTOS) || [];
+            const producto = productos.find(p => p.id === productoId);
+            
+            if (!producto) {
+                window.location.href = 'catalogo.html';
+                return;
+            }
+            
+            const contenido = document.getElementById('producto-contenido');
+            contenido.innerHTML = `
+                <div class="product-detail-image">
+                    <img src="${producto.imagen}" alt="${producto.nombre}" class="product-detail-main-img">
+                </div>
+                <div class="product-detail-info">
+                    <span class="product-detail-category">${producto.categoria.toUpperCase()}</span>
+                    <h1 class="product-detail-title">${producto.nombre}</h1>
+                    <p class="product-detail-price">
+                        ${storage.precio(producto.precio)}
+                        ${producto.precioOriginal ? '<del>' + storage.precio(producto.precioOriginal) + '</del>' : ''}
+                    </p>
+                    <p class="product-detail-desc">${producto.descripcion}</p>
+                    
+                    <div class="product-detail-options">
+                        <p class="product-detail-label">Color</p>
+                        <div class="product-detail-colors">
+                            ${producto.colores.map((color, i) => `
+                                <button class="product-color ${i === 0 ? 'active' : ''}" 
+                                        style="background-color: ${color};" 
+                                        data-color="${color}"></button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="product-detail-options">
+                        <p class="product-detail-label">Talle</p>
+                        <div class="product-detail-sizes">
+                            ${producto.talles.map((talle, i) => `
+                                <button class="product-size ${i === 0 ? 'active' : ''}" 
+                                        data-talle="${talle}">${talle}</button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="product-quantity">
+                        <p class="product-detail-label">Cantidad</p>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button class="quantity-btn" onclick="cambiarCantidad(-1)">-</button>
+                            <span class="quantity-value" id="cantidad-producto">1</span>
+                            <button class="quantity-btn" onclick="cambiarCantidad(1)">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-detail-actions">
+                        <button class="btn btn-primary btn-lg" onclick="agregarAlCarrito()">
+                            AÑADIR AL CARRITO
+                        </button>
+                        <button class="btn btn-outline-dark"><i class="far fa-heart"></i></button>
+                    </div>
+                </div>
+            `;
+            
+            let cantidad = 1;
+            let colorSeleccionado = producto.colores[0];
+            let talleSeleccionado = producto.talles[0];
+            
+            document.querySelectorAll('.product-color').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.product-color').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    colorSeleccionado = this.dataset.color;
+                });
+            });
+            
+            document.querySelectorAll('.product-size').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.product-size').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    talleSeleccionado = this.dataset.talle;
+                });
+            });
+            
+            window.cambiarCantidad = function(delta) {
+                cantidad = Math.max(1, cantidad + delta);
+                document.getElementById('cantidad-producto').textContent = cantidad;
+            };
+            
+            window.agregarAlCarrito = function() {
+                const carrito = storage.obtener(storage.almacen.CARRITO) || [];
+                const item = {
+                    id: storage.generarId(),
+                    productoId: producto.id,
+                    nombre: producto.nombre,
+                    imagen: producto.imagen,
+                    precio: producto.precio,
+                    cantidad: cantidad,
+                    talle: talleSeleccionado,
+                    color: colorSeleccionado,
+                    vendedorId: producto.vendedorId,
+                    vendedorNombre: producto.vendedorNombre
+                };
+                carrito.push(item);
+                storage.guardar(storage.almacen.CARRITO, carousel);
+                storage.toast('Producto agregado al carrito', 'success');
+                setTimeout(() => window.location.href = 'carrito.html', 1500);
+            };
+        });
+    </script>
+</body>
+</html>
+

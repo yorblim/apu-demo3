@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento - APU LUXURY</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/comprador.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <main class="main-content" style="padding-top: 80px; padding-bottom: 80px; background: var(--white);">
+        <div style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
+            <h1 style="font-family: var(--font-serif); font-size: 36px; color: var(--black-oscuro); margin-bottom: 40px;">Mis Pedidos</h1>
+            
+            <div id="lista-pedidos"></div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/componentes.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const storage = window.StorageUtils;
+            const sesion = storage.obtenerSesion();
+            const urlParams = new URLSearchParams(window.location.search);
+            const codigo = urlParams.get('codigo');
+            
+            const pedidos = storage.obtener(storage.almacen.PEDIDOS) || [];
+            const pedidosUsuario = pedidos.filter(p => p.compradorId === sesion.id);
+            const lista = document.getElementById('lista-pedidos');
+            
+            if (codigo) {
+                const pedido = pedidos.find(p => p.codigoPedido === codigo);
+                if (pedido) {
+                    const estados = ['Origen', 'En Tránsito', 'Destino', 'Entregado'];
+                    const idx = estados.indexOf(pedido.estado);
+                    
+                    lista.innerHTML = `
+                        <div style="background: var(--white); border: 1px solid #E5E7EB; border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                                <h2 style="font-family: var(--font-serif); font-size: 24px; color: var(--black-oscuro);">Pedido: ${pedido.codigoPedido}</h2>
+                                <span class="badge badge-success">${pedido.estado}</span>
+                            </div>
+                            
+                            <div class="seguimiento-steps" style="margin-bottom: 30px;">
+                                ${estados.map((e, i) => `
+                                    <div class="seguimiento-step ${i <= idx ? 'active' : ''} ${i < idx ? 'completed' : ''}">
+                                        <div class="seguimiento-step-icon"><i class="fas ${i < idx ? 'fa-check' : 'fa-circle'}"></i></div>
+                                        <span class="seguimiento-step-label">${e}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                                <div style="padding: 20px; background: #F9FAFB; border-radius: 8px;"><p style="font-size: 12px; color: #666; margin-bottom: 5px;">CÓDIGO SEGUIMIENTO</p><p style="font-weight: 600; color: var(--black-oscuro);">${pedido.codigoSeguimiento}</p></div>
+                                <div style="padding: 20px; background: #F9FAFB; border-radius: 8px;"><p style="font-size: 12px; color: #666; margin-bottom: 5px;">FECHA ESTIMADA</p><p style="font-weight: 600; color: var(--black-oscuro);">${new Date(pedido.fechaEstimada).toLocaleDateString('es-PE')}</p></div>
+                            </div>
+                            
+                            <a href="./seguimiento-publico.html?codigo=${pedido.codigoPedido}" class="btn btn-outline-dark" style="margin-top: 20px;">VER PÁGINA PÚBLICA</a>
+                        </div>
+                        <a href="./mi-cuenta.html" class="btn btn-primary">&larr; VOLVER A MI CUENTA</a>
+                    `;
+                    return;
+                }
+            }
+            
+            if (pedidosUsuario.length === 0) {
+                lista.innerHTML = '<div style="text-align: center; padding: 60px;"><i class="fas fa-box-open" style="font-size: 48px; color: #E5E7EB; margin-bottom: 20px;"></i><p style="color: #666;">No tienes pedidos aún.</p><a href="catalogo.html" class="btn btn-primary" style="margin-top: 20px;">EXPLORAR CATÁLOGO</a></div>';
+            } else {
+                lista.innerHTML = pedidosUsuario.map(p => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: var(--white); border: 1px solid #E5E7EB; border-radius: 12px; margin-bottom: 15px;">
+                        <div><p style="font-weight: 600; color: var(--black-oscuro);">${p.codigoPedido}</p><p style="font-size: 13px; color: #666;">${new Date(p.fechaPedido).toLocaleDateString('es-PE')} | ${p.items.length} artículo(s)</p></div>
+                        <span class="badge badge-success">${p.estado}</span>
+                        <span style="font-weight: 700; color: var(--black-oscuro);">${storage.precio(p.total)}</span>
+                        <a href="./seguimiento-privado.html?codigo=${p.codigoPedido}" class="btn btn-sm btn-outline-dark">SEGUIMIENTO</a>
+                    </div>
+                `).join('');
+            }
+        });
+    </script>
+</body>
+</html>
+

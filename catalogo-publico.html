@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - APU LUXURY</title>
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/comprador.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body id="catalogo-page">
+    <header class="navbar-comprador">
+        <div class="navbar-logo">
+            <a href="index.html">
+                <img src="image/Logo-Apu-Luxury-dorado-negro.png" alt="APU LUXURY">
+            </a>
+        </div>
+
+        <nav class="navbar-menu">
+            <a href="index.html">INICIO</a>
+            <a href="catalogo-publico.html" class="active">CATÁLOGO</a>
+            <a href="#historia">HISTORIA</a>
+            <a href="#contacto">CONTACTO</a>
+        </nav>
+
+        <div class="navbar-icons">
+            <a href="catalogo-publico.html" class="navbar-icon"><i class="fas fa-search"></i></a>
+            <a href="login.html" class="navbar-icon"><i class="fas fa-user"></i></a>
+            <button class="mobile-menu-btn" id="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Menú Móvil -->
+    <div class="mobile-menu" id="mobile-menu">
+        <i class="fas fa-times mobile-close" id="menu-close"></i>
+        <a href="index.html">INICIO</a>
+        <a href="catalogo-publico.html">CATÁLOGO</a>
+        <a href="#historia">HISTORIA</a>
+        <a href="#contacto">CONTACTO</a>
+        <a href="login.html">INICIAR SESIÓN</a>
+    </div>
+
+    <main class="main-content" style="padding-top: 80px;">
+        <section class="products-section">
+            <div class="filters-bar">
+                <div class="filters-left">
+                    <span class="filters-count" id="productos-count">Todos los productos</span>
+                    <select id="filtro-categoria" class="filters-select">
+                        <option value="todas">Todas las categorías</option>
+                        <option value="abrigos">Abrigos & Ponchos</option>
+                        <option value="chompas">Chompas & Sweaters</option>
+                        <option value="accesorios">Accesorios</option>
+                        <option value="vestidos">Vestidos & Faldas</option>
+                    </select>
+                </div>
+                <div class="filters-right">
+                    <div class="hero-search" style="margin-top: 0; max-width: 300px;">
+                        <input type="text" id="busqueda-input" class="hero-search-input" placeholder="Buscar productos...">
+                        <button id="busqueda-btn" class="hero-search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="products-grid" id="productos-grid"></div>
+        </section>
+    </main>
+
+    <footer class="footer-comprador" id="contacto">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <img src="image/Logo-Apu-Luxury-dorado-negro.png" alt="APU LUXURY">
+                </div>
+                <p class="footer-desc">Moda andina de alta calidad, tejida a mano en Cusco.</p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-title">NAVEGACIÓN</h4>
+                <div class="footer-links">
+                    <a href="index.html">Inicio</a>
+                    <a href="catalogo-publico.html">Catálogo</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 APU LUXURY.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/storage.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Menú hamburguesa
+            document.getElementById('menu-btn').addEventListener('click', function() {
+                document.getElementById('mobile-menu').classList.add('active');
+            });
+            document.getElementById('menu-close').addEventListener('click', function() {
+                document.getElementById('mobile-menu').classList.remove('active');
+            });
+
+            const storage = window.StorageUtils;
+            const renderizarProductos = (filtros = {}) => {
+                const grid = document.getElementById('productos-grid');
+                if (!grid) return;
+
+                let productos = storage.obtener(storage.almacen.PRODUCTOS) || [];
+
+                if (filtros.categoria && filtros.categoria !== 'todas') {
+                    productos = productos.filter(p => p.categoria === filtros.categoria);
+                }
+
+                if (filtros.busqueda) {
+                    const termino = filtros.busqueda.toLowerCase();
+                    productos = productos.filter(p => 
+                        p.nombre.toLowerCase().includes(termino) ||
+                        p.descripcion.toLowerCase().includes(termino)
+                    );
+                }
+
+                if (productos.length === 0) {
+                    grid.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 60px;"><h3 style="color: #1A1A1A;">No se encontraron productos</h3></div>';
+                    return;
+                }
+
+                document.getElementById('productos-count').textContent = productos.length + ' productos';
+
+                grid.innerHTML = productos.map(producto => `
+                    <article class="product-card">
+                        <div class="product-image">
+                            ${producto.precioOriginal ? '<span class="product-badge badge-pink">SALE</span>' : ''}
+                            <button class="product-wishlist"><i class="far fa-heart"></i></button>
+                            <img src="${producto.imagen}" alt="${producto.nombre}">
+                            <button class="product-add" onclick="window.location.href='login.html'">AÑADIR AL CARRITO</button>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-category">${producto.categoria.toUpperCase()}</span>
+                            <h3 class="product-name">${producto.nombre}</h3>
+                            <p class="product-material">${producto.material}</p>
+                            <p class="product-price">
+                                <strong>${storage.precio(producto.precio)}</strong>
+                                ${producto.precioOriginal ? '<del>' + storage.precio(producto.precioOriginal) + '</del>' : ''}
+                            </p>
+                        </div>
+                    </article>
+                `).join('');
+            };
+
+            // Verificar categoría en URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoriaUrl = urlParams.get('categoria');
+            if (categoriaUrl) {
+                document.getElementById('filtro-categoria').value = categoriaUrl;
+                renderizarProductos({ categoria: categoriaUrl });
+            } else {
+                renderizarProductos();
+            }
+
+            // Filtros
+            document.getElementById('filtro-categoria').addEventListener('change', function() {
+                const busqueda = document.getElementById('busqueda-input').value;
+                renderizarProductos({ categoria: this.value, busqueda });
+            });
+
+            document.getElementById('busqueda-btn').addEventListener('click', function() {
+                const categoria = document.getElementById('filtro-categoria').value;
+                renderizarProductos({ categoria, busqueda: document.getElementById('busqueda-input').value });
+            });
+        });
+    </script>
+</body>
+</html>
