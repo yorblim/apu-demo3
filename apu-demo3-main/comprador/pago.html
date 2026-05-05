@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago - APU LUXURY</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/comprador.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body id="pago-page">
+    <div id="navbar-container"></div>
+
+    <main class="main-content" style="padding-top: 80px;">
+        <section class="checkout-section">
+            <h1 style="font-family: var(--font-serif); font-size: 36px; margin-bottom: 30px; color: var(--black-oscuro); text-align: center;">Checkout</h1>
+            
+            <div class="checkout-progress">
+                <div class="checkout-step active"><div class="checkout-step-number">1</div><span class="checkout-step-label">Carrito</span></div>
+                <div class="checkout-step-line"></div>
+                <div class="checkout-step"><div class="checkout-step-number">2</div><span class="checkout-step-label">Datos</span></div>
+                <div class="checkout-step-line"></div>
+                <div class="checkout-step"><div class="checkout-step-number">3</div><span class="checkout-step-label">Envío</span></div>
+                <div class="checkout-step-line"></div>
+                <div class="checkout-step"><div class="checkout-step-number">4</div><span class="checkout-step-label">Pago</span></div>
+                <div class="checkout-step-line"></div>
+                <div class="checkout-step"><div class="checkout-step-number">5</div><span class="checkout-step-label">Confirmar</span></div>
+            </div>
+
+            <div class="checkout-grid">
+                <div class="checkout-form" id="form-carrito">
+                    <h2 class="checkout-form-title">Resumen del Pedido</h2>
+                    <div id="resumen-items"></div>
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #EEE;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><span>Subtotal</span><span id="resumen-subtotal">S/ 0.00</span></div>
+                        <div style="display: flex; justify-content: space-between;"><span>Envío</span><span id="resumen-envio">S/ 15.00</span></div>
+                    </div>
+                </div>
+
+                <div class="checkout-form hidden" id="form-datos">
+                    <h2 class="checkout-form-title">Información Personal</h2>
+                    <div class="form-group">
+                        <label class="form-label">Nombre Completo</label>
+                        <input type="text" id="checkout-nombre" class="form-input" placeholder="Juan Pérez">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="email" id="checkout-email" class="form-input" placeholder="tu@correo.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Teléfono</label>
+                        <input type="tel" id="checkout-telefono" class="form-input" placeholder="+51 987 654 321">
+                    </div>
+                </div>
+
+                <div class="checkout-form hidden" id="form-envio">
+                    <h2 class="checkout-form-title">Dirección de Envío</h2>
+                    <div class="form-group">
+                        <label class="form-label">Región</label>
+                        <select id="checkout-region" class="form-select">
+                            <option value="cusco">Cusco</option>
+                            <option value="lambayque">Lambayeque</option>
+                            <option value="arequipa">Arequipa</option>
+                            <option value="internacional">Internacional</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ciudad</label>
+                        <input type="text" id="checkout-ciudad" class="form-input" placeholder="Cusco">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Distrito</label>
+                            <input type="text" id="checkout-distrito" class="form-input" placeholder="Wanchaq">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Código Postal</label>
+                            <input type="text" id="checkout-codigo" class="form-input" placeholder="08000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Referencias</label>
+                        <textarea id="checkout-referencia" class="form-textarea" placeholder="Cerca al mercado central..."></textarea>
+                    </div>
+                </div>
+
+                <div class="checkout-form hidden" id="form-pago">
+                    <h2 class="checkout-form-title">Método de Pago</h2>
+                    <div class="form-group">
+                        <label class="form-checkbox">
+                            <input type="radio" name="pago" value="tarjeta" checked>
+                            <span>Tarjeta de Crédito/Débito</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-checkbox">
+                            <input type="radio" name="pago" value="paypal">
+                            <span>PayPal</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-checkbox">
+                            <input type="radio" name="pago" value="transferencia">
+                            <span>Transferencia Bancaria</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="checkout-form hidden" id="form-confirmar">
+                    <h2 class="checkout-form-title">Confirmar Pedido</h2>
+                    <p style="color: #666; line-height: 1.8;">Por favor verifica que todos los datos sean correctos antes de confirmar tu pedido.</p>
+                    <div style="margin-top: 20px; padding: 20px; background: #F9FAFB; border-radius: 8px;">
+                        <p><strong>Total a pagar:</strong> <span id="confirmar-total" style="font-size: 24px; font-weight: 700; color: var(--orange);">S/ 0.00</span></p>
+                    </div>
+                </div>
+
+                <div class="cart-summary">
+                    <h3 class="cart-summary-title">Total</h3>
+                    <div class="cart-summary-row"><span>Subtotal</span><span id="pago-subtotal">S/ 0.00</span></div>
+                    <div class="cart-summary-row"><span>Envío</span><span id="pago-envio">S/ 15.00</span></div>
+                    <div class="cart-summary-divider"></div>
+                    <div class="cart-summary-total"><span>Total</span><span id="pago-total">S/ 0.00</span></div>
+                    <button id="btn-siguiente" class="btn btn-primary btn-block" style="margin-top: 25px;">CONTINUAR</button>
+                    <button id="btn-anterior" class="btn btn-outline-dark btn-block hidden" style="margin-top: 10px;">ATRÁS</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/componentes.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const storage = window.StorageUtils;
+            if (!storage.estaAutenticado()) { window.location.href = '../login.html'; return; }
+            
+            let paso = 1;
+            const carousel = storage.obtener(storage.almacen.CARRITO) || [];
+            
+            const actualizarResumen = () => {
+                const subtotal = carousel.reduce((s, i) => s + (i.precio * i.cantidad), 0);
+                const envio = 15;
+                const total = subtotal + envio;
+                
+                document.getElementById('resumen-items').innerHTML = carousel.map(i => `
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #EEE;">
+                        <span>${i.nombre} x${i.cantidad}</span>
+                        <span>${storage.precio(i.precio * i.cantidad)}</span>
+                    </div>
+                `).join('');
+                
+                document.getElementById('resumen-subtotal').textContent = storage.precio(subtotal);
+                document.getElementById('resumen-envio').textContent = storage.precio(envio);
+                document.getElementById('pago-subtotal').textContent = storage.precio(subtotal);
+                document.getElementById('pago-envio').textContent = storage.precio(envio);
+                document.getElementById('pago-total').textContent = storage.precio(total);
+                document.getElementById('confirmar-total').textContent = storage.precio(total);
+            };
+            actualizarResumen();
+
+            const mostrarPaso = (n) => {
+                ['form-carrito', 'form-datos', 'form-envio', 'form-pago', 'form-confirmar'].forEach((id, i) => {
+                    document.getElementById(id).classList.toggle('hidden', i + 1 !== n);
+                });
+                document.getElementById('btn-siguiente').textContent = n === 5 ? 'REALIZAR PEDIDO' : 'CONTINUAR';
+                document.getElementById('btn-anterior').classList.toggle('hidden', n === 1);
+            };
+
+            document.getElementById('btn-siguiente').addEventListener('click', function() {
+                if (paso === 2) {
+                    const nombre = document.getElementById('checkout-nombre').value.trim();
+                    const email = document.getElementById('checkout-email').value.trim();
+                    if (!nombre || !email) { storage.toast('Completa todos los campos', 'error'); return; }
+                }
+                
+                if (paso === 5) {
+                    const sesion = storage.obtenerSesion();
+                    const nombre = document.getElementById('checkout-nombre').value.trim();
+                    const email = document.getElementById('checkout-email').value.trim();
+                    const telefono = document.getElementById('checkout-telefono').value.trim();
+                    const region = document.getElementById('checkout-region').value;
+                    const ciudad = document.getElementById('checkout-ciudad').value.trim();
+                    const distrito = document.getElementById('checkout-distrito').value.trim();
+                    const metodopago = document.querySelector('input[name="pago"]:checked').value;
+                    
+                    const subtotal = carousel.reduce((s, i) => s + (i.precio * i.cantidad), 0);
+                    const envio = 15;
+                    const total = subtotal + envio;
+                    
+                    const nuevoPedido = {
+                        id: storage.generarId(),
+                        codigoPedido: storage.codigoPedido(),
+                        codigoSeguimiento: storage.codigoSeg(),
+                        compradorId: sesion.id,
+                        compradorNombre: nombre,
+                        items: [...carousel],
+                        total: total,
+                        envio: envio,
+                        estado: 'Origen',
+                        metodopago: metodopago,
+                        direccion: { region, ciudad, distrito, codigoPostal: '', referencia: '' },
+                        fechaPedido: storage.fecha(),
+                        fechaEstimada: storage.agregarDias(storage.fecha(), 7),
+                        vendedorId: carousel[0]?.vendedorId,
+                        vendedorNombre: carousel[0]?.vendedorNombre
+                    };
+                    
+                    const pedidos = storage.obtener(storage.almacen.PEDIDOS) || [];
+                    pedidos.push(nuevoPedido);
+                    storage.guardar(storage.almacen.PEDIDOS, pedidos);
+                    storage.guardar(storage.almacen.CARRITO, []);
+                    localStorage.setItem('apu_ultimo_pedido', nuevoPedido.codigoPedido);
+                    
+                    window.location.href = 'confirmacion.html';
+                } else {
+                    paso++;
+                    mostrarPaso(paso);
+                }
+            });
+
+            document.getElementById('btn-anterior').addEventListener('click', function() {
+                paso--;
+                mostrarPaso(paso);
+            });
+
+            mostrarPaso(1);
+        });
+    </script>
+</body>
+</html>
+

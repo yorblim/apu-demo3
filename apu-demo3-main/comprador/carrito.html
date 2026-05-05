@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito - APU LUXURY</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/comprador.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body id="carrito-page">
+    <div id="navbar-container"></div>
+
+    <main class="main-content" style="padding-top: 80px;">
+        <section class="cart-section">
+            <h1 style="font-family: var(--font-serif); font-size: 36px; margin-bottom: 40px; color: var(--black-oscuro);">Mi Carrito</h1>
+            <div class="cart-grid">
+                <div class="cart-items" id="carrito-items"></div>
+                <div class="cart-summary">
+                    <h3 class="cart-summary-title">Resumen</h3>
+                    <div class="cart-summary-row"><span>Subtotal</span><span id="cart-subtotal">S/ 0.00</span></div>
+                    <div class="cart-summary-row"><span>Envío</span><span id="cart-envio">S/ 15.00</span></div>
+                    <div class="cart-summary-divider"></div>
+                    <div class="cart-summary-row"><span>Total</span><span id="cart-total">S/ 0.00</span></div>
+                    <div class="cart-summary-actions">
+                        <button id="btn-seguir-comprando" class="btn btn-outline-dark btn-block">SEGUIR COMPRANDO</button>
+                        <button id="btn-proceder-pago" class="btn btn-primary btn-block">PROCEDER AL PAGO</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/componentes.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const storage = window.StorageUtils;
+            if (!storage.estaAutenticado()) { window.location.href = '../login.html'; return; }
+            const btnCerrar = document.getElementById('btn-cerrar-sesion');
+            if (btnCerrar) { btnCerrar.addEventListener('click', function(e) { e.preventDefault(); storage.cerrar(); window.location.href = '../login.html'; }); }
+            
+            const carousel = storage.obtener(storage.almacen.CARRITO) || [];
+            const container = document.getElementById('carrito-items');
+            
+            if (carousel.length === 0) {
+                container.innerHTML = '<div class="cart-empty"><i class="cart-empty-icon fas fa-shopping-bag"></i><h3 class="cart-empty-title">Tu carrito está vacío</h3><p class="cart-empty-desc">Explora nuestro catálogo</p><a href="catalogo.html" class="btn btn-primary">EXPLORAR CATÁLOGO</a></div>';
+                return;
+            }
+            
+            container.innerHTML = carousel.map(item => `
+                <div class="cart-item">
+                    <img src="${item.imagen}" alt="${item.nombre}" class="cart-item-image">
+                    <div class="cart-item-info">
+                        <div class="cart-item-header"><h4 class="cart-item-name">${item.nombre}</h4><i class="cart-item-remove fas fa-trash" data-id="${item.id}" style="cursor:pointer;"></i></div>
+                        <p class="cart-item-details">Talle: ${item.talle}</p>
+                        <div class="cart-item-options">
+                            <div class="cart-item-quantity">
+                                <button data-id="${item.id}" data-accion="restar">-</button>
+                                <span>${item.cantidad}</span>
+                                <button data-id="${item.id}" data-accion="sumar">+</button>
+                            </div>
+                            <span class="cart-item-price">${storage.precio(item.precio * item.cantidad)}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.querySelectorAll('.cart-item-remove').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    let c = storage.obtener(storage.almacen.CARRITO) || [];
+                    c = c.filter(i => i.id !== id);
+                    storage.guardar(storage.almacen.CARRITO, c);
+                    location.reload();
+                });
+            });
+            
+            container.querySelectorAll('.cart-item-quantity button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    const acc = this.dataset.accion;
+                    let c = storage.obtener(storage.almacen.CARRITO) || [];
+                    const it = c.find(i => i.id === id);
+                    if (it) { if (acc === 'sumar') it.cantidad++; else if (acc === 'restar' && it.cantidad > 1) it.cantidad--; }
+                    storage.guardar(storage.almacen.CARRITO, c);
+                    location.reload();
+                });
+            });
+            
+            const subtotal = carousel.reduce((s, i) => s + (i.precio * i.cantidad), 0);
+            const envio = 15;
+            document.getElementById('cart-subtotal').textContent = storage.precio(subtotal);
+            document.getElementById('cart-envio').textContent = storage.precio(envio);
+            document.getElementById('cart-total').textContent = storage.precio(subtotal + envio);
+            
+            document.getElementById('btn-proceder-pago').addEventListener('click', () => window.location.href = 'pago.html');
+            document.getElementById('btn-seguir-comprando').addEventListener('click', () => window.location.href = 'catalogo.html');
+        });
+    </script>
+</body>
+</html>
+

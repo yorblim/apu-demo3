@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Cuenta - APU LUXURY</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/comprador.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body id="mi-cuenta-page">
+    <div id="navbar-container"></div>
+
+    <main class="main-content" style="padding-top: 80px; padding-bottom: 80px; background: var(--white);">
+        <div style="max-width: 1000px; margin: 0 auto; padding: 0 20px;">
+            <h1 style="font-family: var(--font-serif); font-size: 36px; color: var(--black-oscuro); margin-bottom: 40px;">Mi Cuenta</h1>
+            
+            <div style="display: grid; grid-template-columns: 250px 1fr; gap: 40px;">
+                <div style="background: #F9FAFB; border-radius: 12px; padding: 30px; height: fit-content;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div style="width: 80px; height: 80px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 32px; font-weight: 700; color: var(--black-oscuro);" id="avatar-inicial"></div>
+                        <h3 style="color: var(--black-oscuro);" id="cuenta-nombre"></h3>
+                        <p style="color: #666; font-size: 14px;" id="cuenta-email"></p>
+                    </div>
+                    <nav style="display: flex; flex-direction: column; gap: 10px;">
+                        <a href="./mi-cuenta.html" class="btn btn-outline-dark btn-block" style="text-align: left;"><i class="fas fa-user" style="margin-right: 10px;"></i> Mi Perfil</a>
+                        <a href="./seguimiento-privado.html" class="btn btn-outline-dark btn-block" style="text-align: left;"><i class="fas fa-box" style="margin-right: 10px;"></i> Mis Pedidos</a>
+                        <a href="./seguimiento-privado.html" class="btn btn-outline-dark btn-block" style="text-align: left;"><i class="fas fa-truck" style="margin-right: 10px;"></i> Seguimiento</a>
+                        <a href="../login.html" class="btn btn-outline-dark btn-block" style="text-align: left; border-color: var(--rosa); color: var(--rosa);" id="btn-cerrar"><i class="fas fa-sign-out-alt" style="margin-right: 10px;"></i> Cerrar Sesión</a>
+                    </nav>
+                </div>
+                
+                <div>
+                    <div style="background: white; border: 1px solid #E5E7EB; border-radius: 12px; padding: 30px; margin-bottom: 30px;">
+                        <h2 style="font-family: var(--font-serif); font-size: 24px; color: var(--black-oscuro); margin-bottom: 25px;">Información Personal</h2>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                            <div><p style="font-size: 12px; color: #666; margin-bottom: 5px;">NOMBRE</p><p style="color: var(--black-oscuro);" id="info-nombre"></p></div>
+                            <div><p style="font-size: 12px; color: #666; margin-bottom: 5px;">EMAIL</p><p style="color: var(--black-oscuro);" id="info-email"></p></div>
+                            <div><p style="font-size: 12px; color: #666; margin-bottom: 5px;">TELÉFONO</p><p style="color: var(--black-oscuro);" id="info-telefono"></p></div>
+                            <div><p style="font-size: 12px; color: #666; margin-bottom: 5px;">TIPO DE CUENTA</p><p style="color: var(--black-oscuro);">COMPRADOR</p></div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; border: 1px solid #E5E7EB; border-radius: 12px; padding: 30px;">
+                        <h2 style="font-family: var(--font-serif); font-size: 24px; color: var(--black-oscuro); margin-bottom: 25px;">Mis Pedidos Recientes</h2>
+                        <div id="pedidos-lista"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/componentes.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const storage = window.StorageUtils;
+            if (!storage.estaAutenticado()) { window.location.href = '../login.html'; return; }
+            
+            const sesion = storage.obtenerSesion();
+            const nombre = sesion.nombre.split(' ');
+            document.getElementById('avatar-inicial').textContent = nombre[0][0];
+            document.getElementById('cuenta-nombre').textContent = sesion.nombre;
+            document.getElementById('cuenta-email').textContent = sesion.email;
+            document.getElementById('info-nombre').textContent = sesion.nombre;
+            document.getElementById('info-email').textContent = sesion.email;
+            document.getElementById('info-telefono').textContent = sesion.telefono;
+            
+            document.getElementById('btn-cerrar').addEventListener('click', function(e) {
+                e.preventDefault();
+                storage.cerrar();
+                window.location.href = '../login.html';
+            });
+            
+            const pedidos = storage.obtener(storage.almacen.PEDIDOS) || [];
+            const pedidosUsuario = pedidos.filter(p => p.compradorId === sesion.id);
+            const lista = document.getElementById('pedidos-lista');
+            
+            if (pedidosUsuario.length === 0) {
+                lista.innerHTML = '<p style="color: #666; text-align: center; padding: 40px;">No tienes pedidos aún.</p>';
+            } else {
+                lista.innerHTML = pedidosUsuario.slice(0, 5).map(p => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #E5E7EB;">
+                        <div><p style="font-weight: 600; color: var(--black-oscuro);">${p.codigoPedido}</p><p style="font-size: 13px; color: #666;">${new Date(p.fechaPedido).toLocaleDateString('es-PE')}</p></div>
+                        <span class="badge badge-success">${p.estado}</span>
+                        <span style="font-weight: 700; color: var(--black-oscuro);">${storage.precio(p.total)}</span>
+                        <a href="./seguimiento-privado.html?codigo=${p.codigoPedido}" class="btn btn-sm btn-outline-dark">Ver</a>
+                    </div>
+                `).join('');
+            }
+        });
+    </script>
+</body>
+</html>
+

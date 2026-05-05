@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito - APU LUXURY</title>
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/comprador.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar-comprador">
+        <div class="navbar-logo"><a href="index.html"><img src="image/Logo-Apu-Luxury-dorado-negro.png" alt="APU LUXURY"></a></div>
+        <nav class="navbar-menu">
+            <a href="index.html">INICIO</a>
+            <a href="catalogo-publico.html">CATÁLOGO</a>
+        </nav>
+        <div class="navbar-icons">
+            <button class="mobile-menu-btn" id="menu-btn"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <i class="fas fa-times mobile-close" id="menu-close"></i>
+        <a href="index.html">INICIO</a>
+        <a href="catalogo-publico.html">CATÁLOGO</a>
+        <a href="login.html">INICIAR SESIÓN</a>
+    </div>
+
+    <main class="main-content" style="padding-top: 80px;">
+        <section class="cart-section">
+            <h1 style="font-family: var(--font-serif); font-size: 36px; margin-bottom: 40px; color: var(--black-oscuro);">Mi Carrito</h1>
+            <div class="cart-grid">
+                <div class="cart-items" id="carrito-items">
+                    <div class="cart-empty">
+                        <i class="cart-empty-icon fas fa-shopping-bag"></i>
+                        <h3 class="cart-empty-title">Tu carrito está vacío</h3>
+                        <p class="cart-empty-desc">Explora nuestro catálogo público</p>
+                        <a href="catalogo-publico.html" class="btn btn-primary">EXPLORAR CATÁLOGO</a>
+                    </div>
+                </div>
+                <div class="cart-summary">
+                    <h3 class="cart-summary-title">Resumen</h3>
+                    <p style="color: #666; font-size: 14px; text-align: center; padding: 20px 0;">Inicia sesión para ver tu carrito</p>
+                    <a href="login.html" class="btn btn-primary btn-block">INICIAR SESIÓN</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.getElementById('menu-btn').addEventListener('click', () => document.getElementById('mobile-menu').classList.add('active'));
+        document.getElementById('menu-close').addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('active'));
+    </script>
+</body>
+</html>

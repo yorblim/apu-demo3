@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - APU LUXURY Vendedor</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/vendedor.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body id="productos-page">
+    <div class="dashboard-layout">
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header"><div class="sidebar-logo"><img src="../image/Logo-Apu-Luxury-dorado-negro.png" alt="APU LUXURY"><span class="sidebar-logo-badge">PRO</span></div></div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-title">Menú</div>
+                <a href="./dashboard.html" class="sidebar-nav-item"><i class="fas fa-home"></i> Inicio</a>
+                <a href="./productos.html" class="sidebar-nav-item active"><i class="fas fa-box"></i> Productos</a>
+                <a href="./inventario.html" class="sidebar-nav-item"><i class="fas fa-warehouse"></i> Inventario</a>
+                <a href="./pedidos.html" class="sidebar-nav-item"><i class="fas fa-shopping-cart"></i> Pedidos</a>
+                <a href="./exportacion.html" class="sidebar-nav-item"><i class="fas fa-shipping-fast"></i> Exportación</a>
+                <a href="./documentacion.html" class="sidebar-nav-item"><i class="fas fa-file-alt"></i> Documentación</a>
+                <div class="sidebar-nav-title" style="margin-top: 20px;">Cuenta</div>
+                <a href="./perfil.html" class="sidebar-nav-item"><i class="fas fa-store"></i> Mi Tienda</a>
+                <a href="./estadisticas.html" class="sidebar-nav-item"><i class="fas fa-chart-line"></i> Estadísticas</a>
+                <a href="./configuracion.html" class="sidebar-nav-item"><i class="fas fa-cog"></i> Configuración</a>
+            </nav>
+            <div class="sidebar-footer"><div class="sidebar-user"><div class="sidebar-user-avatar" id="user-avatar">V</div><div class="sidebar-user-info"><div class="sidebar-user-name" id="user-name">Vendedor</div></div></div><a href="../login.html" id="btn-cerrar">Cerrar Sesión</a></div>
+        </aside>
+        <main class="dashboard-main">
+            <header class="dashboard-header"><div class="header-left"><h1 class="header-title">Productos</h1></div><div class="header-right"><button id="btn-abrir-modal" class="btn btn-primary">+ AGREGAR PRODUCTO</button></div></header>
+            <div class="dashboard-content">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <select id="filtro-categoria" class="filters-select"><option value="todas">Todas las categorías</option><option value="abrigos">Abrigos</option><option value="chompas">Chompas</option><option value="accesorios">Accesorios</option><option value="vestidos">Vestidos</option></select>
+                        <select id="filtro-estado" class="filters-select"><option value="todos">Todos los estados</option><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select>
+                    </div>
+                    <div class="dashboard-card-body" style="padding: 0;">
+                        <table class="table-vendedor"><thead><tr><th>Producto</th><th>Stock</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="productos-tabla"></tbody></table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modal-producto">
+        <div class="modal modal-vendedor">
+            <div class="modal-header"><h3 class="modal-title" id="modal-titulo">Agregar Producto</h3><button class="modal-close" id="cerrar-modal">&times;</button></div>
+            <div class="modal-body">
+                <form id="form-producto">
+                    <input type="hidden" id="producto-id">
+                    <div class="form-group"><label class="form-label">Nombre del Producto</label><input type="text" id="producto-nombre" class="form-input" required></div>
+                    <div class="form-row">
+                        <div class="form-group"><label class="form-label">Categoría</label><select id="producto-categoria" class="form-select"><option value="abrigos">Abrigos & Ponchos</option><option value="chompas">Chompas & Sweaters</option><option value="accesorios">Accesorios</option><option value="vestidos">Vestidos & Faldas</option></select></div>
+                        <div class="form-group"><label class="form-label">Precio (S/)</label><input type="number" id="producto-precio" class="form-input" min="1" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label class="form-label">Stock</label><input type="number" id="producto-stock" class="form-input" min="0" required></div>
+                        <div class="form-group"><label class="form-label">Material</label><input type="text" id="producto-material" class="form-input"></div>
+                    </div>
+                    <div class="form-group"><label class="form-label">Descripción</label><textarea id="producto-descripcion" class="form-textarea"></textarea></div>
+                    <button type="submit" class="btn btn-primary btn-block">GUARDAR PRODUCTO</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/storage.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/vendedor.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const storage = window.StorageUtils;
+            if (!storage.verificarVendedor()) return;
+            const sesion = storage.obtenerSesion();
+            document.getElementById('user-name').textContent = sesion.nombre;
+            document.getElementById('user-avatar').textContent = sesion.nombre[0];
+            document.getElementById('btn-cerrar').addEventListener('click', e => { e.preventDefault(); storage.cerrar(); window.location.href = '../login.html'; });
+            
+            const productos = storage.obtener(storage.almacen.PRODUCTOS) || [];
+            const render = () => {
+                document.getElementById('productos-tabla').innerHTML = productos.length === 0 ? '<tr><td colspan="5" style="text-align: center; padding: 40px;">No hay productos</td></tr>' : productos.map(p => `
+                    <tr>
+                        <td><div class="table-producto"><img src="${p.imagen}" class="table-producto-img"><div class="table-producto-info"><div class="table-producto-nombre">${p.nombre}</div><div class="table-producto-categoria">${p.categoria}</div></div></div></td>
+                        <td>${p.stock}</td>
+                        <td>${storage.precio(p.precio)}</td>
+                        <td><span class="table-status ${p.estado === 'activo' ? 'active' : 'inactive'}">${p.estado}</span></td>
+                        <td><div class="table-acciones"><button onclick="abrirModalEditar('${p.id}')"><i class="fas fa-edit"></i></button><button onclick="eliminarProducto('${p.id}')" class="delete"><i class="fas fa-trash"></i></button></div></td>
+                    </tr>
+                `).join('');
+            };
+            render();
+            document.getElementById('form-producto').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const id = document.getElementById('producto-id').value;
+                const nuevo = { id: id || storage.generarId(), nombre: document.getElementById('producto-nombre').value, categoria: document.getElementById('producto-categoria').value, precio: parseFloat(document.getElementById('producto-precio').value), stock: parseInt(document.getElementById('producto-stock').value), material: document.getElementById('producto-material').value, descripcion: document.getElementById('producto-descripcion').value, imagen: 'image/chica-joven-poncho-andino-rojo.jpg', colores: ['#1A1A1A'], talles: ['Único'], vendedorId: sesion.id, vendedorNombre: sesion.nombre, fechaPublicacion: storage.fecha(), estado: 'activo' };
+                if (id) { const i = productos.findIndex(p => p.id === id); if (i !== -1) productos[i] = {...productos[i], ...nuevo}; }
+                else { produtos.push(nuevo); }
+                storage.guardar(storage.almacen.PRODUCTOS, productos);
+                document.getElementById('modal-producto').classList.remove('active');
+                storage.toast('Producto guardado', 'success');
+                render();
+            });
+            document.getElementById('btn-abrir-modal').addEventListener('click', () => { document.getElementById('form-producto').reset(); document.getElementById('producto-id').value = ''; document.getElementById('modal-producto').classList.add('active'); });
+            document.getElementById('cerrar-modal').addEventListener('click', () => document.getElementById('modal-producto').classList.remove('active'));
+        });
+    </script>
+</body>
+</html>

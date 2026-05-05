@@ -1,0 +1,2 @@
+   - Comprador: comprador@apu.com / Comprador123
+   - Vendedor: vendedor@apu.com / Vendedor123
