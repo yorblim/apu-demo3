@@ -888,6 +888,11 @@
 .checkout-section {
     padding: 150px 50px 80px;
     background-color: var(--white);
+    color: var(--black-oscuro);
+}
+
+.checkout-section .form-checkbox span {
+    color: var(--black-oscuro);
 }
 
 .checkout-progress {
@@ -929,6 +934,11 @@
 
 .checkout-step.active .checkout-step-label {
     color: var(--black-oscuro);
+    font-weight: 600;
+}
+
+.checkout-step.completed .checkout-step-label {
+    color: var(--gray-oscuro);
     font-weight: 600;
 }
 

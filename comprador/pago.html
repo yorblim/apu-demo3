@@ -162,9 +162,16 @@
             };
             actualizarResumen();
 
+            const pasosIndicador = document.querySelectorAll('.checkout-step');
+
             const mostrarPaso = (n) => {
                 ['form-carrito', 'form-datos', 'form-envio', 'form-pago', 'form-confirmar'].forEach((id, i) => {
                     document.getElementById(id).classList.toggle('hidden', i + 1 !== n);
+                });
+                pasosIndicador.forEach((el, index) => {
+                    el.classList.remove('active', 'completed');
+                    if (index + 1 < n) el.classList.add('completed');
+                    else if (index + 1 === n) el.classList.add('active');
                 });
                 document.getElementById('btn-siguiente').textContent = n === 5 ? 'REALIZAR PEDIDO' : 'CONTINUAR';
                 document.getElementById('btn-anterior').classList.toggle('hidden', n === 1);
